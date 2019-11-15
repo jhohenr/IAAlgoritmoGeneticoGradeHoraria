@@ -24,7 +24,7 @@ public class Dados {
 	private static Document leitura() throws ParserConfigurationException, SAXException, IOException {
 
 		File fXmlFile = new File(
-				"C:\\Users\\Angela\\Desktop\\IAAlgoritmoGeneticoGradeHoraria\\src\\main\\resources\\dados.xml");
+				"C:\\Users\\carol\\OneDrive\\\\Documentos\\IAF\\IAAlgoritmoGeneticoGradeHoraria\\src\\main\\resources\\dados.xml");
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 		Document doc = dBuilder.parse(fXmlFile);
@@ -34,7 +34,7 @@ public class Dados {
 	}
 
 	public static ArrayList<Curso> lerCursos() {
-		
+
 		ArrayList<Curso> items = new ArrayList<Curso>();
 
 		try {
@@ -98,7 +98,7 @@ public class Dados {
 
 		return items;
 	}
-	
+
 	public static ArrayList<Aula> lerAulas(ArrayList<Disciplina> disciplinas) {
 
 		ArrayList<Aula> items = new ArrayList<Aula>();
@@ -110,15 +110,16 @@ public class Dados {
 				Node nNode = nList.item(i);
 				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 					Element eElement = (Element) nNode;
-					
-					Aula item = new Aula(eElement.getAttribute("id"), eElement.getAttribute("subjectid"), eElement.getAttribute("teacherid"));
-					
+
+					Aula item = new Aula(eElement.getAttribute("id"), eElement.getAttribute("subjectid"),
+							eElement.getAttribute("teacherid"));
+
 					for (Disciplina disciplina : disciplinas) {
 						if (disciplina.id.equals(eElement.getAttribute("subjectid"))) {
 							disciplina.idCurso = eElement.getAttribute("classid");
 						}
 					}
-					
+
 					items.add(item);
 				}
 			}
@@ -128,7 +129,7 @@ public class Dados {
 
 		return items;
 	}
-	
+
 	public static ArrayList<Indisponibilidade> lerIndisponibilidades() {
 
 		ArrayList<Indisponibilidade> items = new ArrayList<Indisponibilidade>();
@@ -141,33 +142,16 @@ public class Dados {
 				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 					Element eElement = (Element) nNode;
 					String[] timeoffs = eElement.getAttribute("timeoff").split(",");
-					
+					int day = 0;
 					for (String timeoff : timeoffs) {
-						int periodo = 0;
-						int cTurno = 0;
-						
-						int horario = 0;
-						int turno = 0;
-						
-						for (char c : timeoff.toCharArray()) {
-							periodo++;
-							cTurno++;
-							
-							if (periodo % 2 == 0) {
-								if (cTurno < 4) {
-									turno = 1;
-								} else if (cTurno >= 4 && cTurno < 8) {
-									turno = 2;
-								} else if (cTurno >= 8) {
-									turno = 3;
-								}
-								
-								if (c == '0') {
-									horario = periodo;
-									Indisponibilidade item = new Indisponibilidade(eElement.getAttribute("id"), horario, turno);
-									items.add(item);
-								}
+						day++;
+						int cont = 0;
+						for (char horary : timeoff.toCharArray()) {
+							if (horary == '0') {
+								Indisponibilidade item = new Indisponibilidade(eElement.getAttribute("id"), day, cont);
+								items.add(item);
 							}
+							cont++;
 						}
 					}
 				}
