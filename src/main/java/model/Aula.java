@@ -2,18 +2,16 @@ package model;
 
 public class Aula {
 
-	public String id;
-	public String idDisciplina;
-	public String idProfessor;
+	public int id;
+	public int idDisciplina;
+	public int idProfessor;
 
 	public Aula() {
 		
-		super();
 	}
 
-	public Aula(String id, String idDisciplina, String idProfessor) {
+	public Aula(int id, int idDisciplina, int idProfessor) {
 		
-		super();
 		this.id = id;
 		this.idDisciplina = idDisciplina;
 		this.idProfessor = idProfessor;

@@ -1,20 +1,32 @@
 package model;
 
+import java.util.ArrayList;
+
 public class Curso {
 
-	public String id;
+	public int id;
 	public String nome;
 
 	public Curso() {
 		
-		super();
 	}
 
-	public Curso(String id, String nome) {
+	public Curso(int id, String nome) {
 		
-		super();
 		this.id = id;
 		this.nome = nome;
+	}
+	
+	public ArrayList<Disciplina> disciplinas(ArrayList<Disciplina> disciplinas) {
+		ArrayList<Disciplina> di = new ArrayList<Disciplina>();
+		
+		for (Disciplina disciplina : disciplinas) {
+			if (disciplina.idCurso == id) {
+				di.add(disciplina);
+			}
+		}
+		
+		return di;
 	}
 
 }

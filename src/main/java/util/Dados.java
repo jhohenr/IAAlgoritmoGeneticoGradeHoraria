@@ -24,7 +24,7 @@ public class Dados {
 	private static Document leitura() throws ParserConfigurationException, SAXException, IOException {
 
 		File fXmlFile = new File(
-				"C:\\Users\\carol\\OneDrive\\\\Documentos\\IAF\\IAAlgoritmoGeneticoGradeHoraria\\src\\main\\resources\\dados.xml");
+				"C:\\Users\\Angela\\Desktop\\IAAlgoritmoGeneticoGradeHoraria\\src\\main\\resources\\dados.xml");
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 		Document doc = dBuilder.parse(fXmlFile);
@@ -40,12 +40,17 @@ public class Dados {
 		try {
 			Document doc = leitura();
 			NodeList nList = doc.getElementsByTagName("class");
+			
 			for (int i = 0; i < nList.getLength(); i++) {
 				Node nNode = nList.item(i);
+				
 				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 					Element eElement = (Element) nNode;
-					Curso item = new Curso(eElement.getAttribute("id"), eElement.getAttribute("name"));
-					items.add(item);
+					
+					if (eElement.getAttribute("name").startsWith("Grad")) {
+						Curso item = new Curso(Integer.parseInt(eElement.getAttribute("id")), eElement.getAttribute("name"));
+						items.add(item);
+					}
 				}
 			}
 		} catch (Exception e) {
@@ -62,11 +67,13 @@ public class Dados {
 		try {
 			Document doc = leitura();
 			NodeList nList = doc.getElementsByTagName("teacher");
+			
 			for (int i = 0; i < nList.getLength(); i++) {
 				Node nNode = nList.item(i);
+				
 				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 					Element eElement = (Element) nNode;
-					Professor item = new Professor(eElement.getAttribute("id"), eElement.getAttribute("name"));
+					Professor item = new Professor(Integer.parseInt(eElement.getAttribute("id")), eElement.getAttribute("name"));
 					items.add(item);
 				}
 			}
@@ -84,11 +91,13 @@ public class Dados {
 		try {
 			Document doc = leitura();
 			NodeList nList = doc.getElementsByTagName("subject");
+			
 			for (int i = 0; i < nList.getLength(); i++) {
 				Node nNode = nList.item(i);
+				
 				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 					Element eElement = (Element) nNode;
-					Disciplina item = new Disciplina(eElement.getAttribute("id"), null, eElement.getAttribute("name"));
+					Disciplina item = new Disciplina(Integer.parseInt(eElement.getAttribute("id")), -1, eElement.getAttribute("name"));
 					items.add(item);
 				}
 			}
@@ -106,17 +115,19 @@ public class Dados {
 		try {
 			Document doc = leitura();
 			NodeList nList = doc.getElementsByTagName("lesson");
+			
 			for (int i = 0; i < nList.getLength(); i++) {
 				Node nNode = nList.item(i);
+				
 				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 					Element eElement = (Element) nNode;
 
-					Aula item = new Aula(eElement.getAttribute("id"), eElement.getAttribute("subjectid"),
-							eElement.getAttribute("teacherid"));
+					Aula item = new Aula(Integer.parseInt(eElement.getAttribute("id")), Integer.parseInt(eElement.getAttribute("subjectid")),
+							Integer.parseInt(eElement.getAttribute("teacherid")));
 
 					for (Disciplina disciplina : disciplinas) {
-						if (disciplina.id.equals(eElement.getAttribute("subjectid"))) {
-							disciplina.idCurso = eElement.getAttribute("classid");
+						if (disciplina.id == Integer.parseInt(eElement.getAttribute("subjectid"))) {
+							disciplina.idCurso = Integer.parseInt(eElement.getAttribute("classid"));
 						}
 					}
 
@@ -137,18 +148,22 @@ public class Dados {
 		try {
 			Document doc = leitura();
 			NodeList nList = doc.getElementsByTagName("teacher");
+			
 			for (int i = 0; i < nList.getLength(); i++) {
 				Node nNode = nList.item(i);
+				
 				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 					Element eElement = (Element) nNode;
 					String[] timeoffs = eElement.getAttribute("timeoff").split(",");
 					int day = 0;
+					
 					for (String timeoff : timeoffs) {
 						day++;
 						int cont = 0;
+						
 						for (char horary : timeoff.toCharArray()) {
 							if (horary == '0') {
-								Indisponibilidade item = new Indisponibilidade(eElement.getAttribute("id"), day, cont);
+								Indisponibilidade item = new Indisponibilidade(Integer.parseInt(eElement.getAttribute("id")), day, cont);
 								items.add(item);
 							}
 							cont++;

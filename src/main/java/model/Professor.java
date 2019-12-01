@@ -1,20 +1,20 @@
 package model;
 
+import java.util.ArrayList;
+
 public class Professor {
 
-	public String id;
+	public int id;
 	public String nome;
 
 	public Professor() {
 		
-		super();
 	}
 
-	public Professor(String id, String nome) {
+	public Professor(int id, String nome) {
 		
-		super();
 		this.id = id;
 		this.nome = nome;
 	}
-
+	
 }
