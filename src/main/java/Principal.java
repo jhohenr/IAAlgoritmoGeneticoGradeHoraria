@@ -14,7 +14,6 @@ import model.Professor;
 public class Principal {
 
 	static int elitismo = 10; // 10%
-	static int roletaSimples = 100 - elitismo; // 90%
 	
 	static int tamPopulacao = 100;
 	static int tamCromossomo = 240; // 12 cursos x 20
@@ -33,108 +32,19 @@ public class Principal {
 		aulas = Dados.lerAulas(disciplinas);
 		indisponibilidades = Dados.lerIndisponibilidades();
 
-		ArrayList<Individuo> populacao = gerarPopulacaoInicial();
-		calcularPopulacao(populacao);
-		ordenarPopulacao(populacao);
-		exibirPopulacao(populacao);
+		Populacao populacao = Populacao.gerar(tamPopulacao, tamCromossomo, disciplinas);
+		populacao.calcular(cursos, disciplinas);
+		populacao.ordenar();
 		
-		roletaSimples(populacao);
-		ArrayList<Individuo> novaPopulacao = gerarPopulacao(populacao);
-		System.out.println(novaPopulacao.size());
-	}
-	
-	public static ArrayList<Individuo> gerarPopulacao(ArrayList<Individuo> populacao) {
-
-		ArrayList<Individuo> novaPopulacao = new ArrayList<Individuo>();
-		int maxElitismo = tamPopulacao * elitismo / 100;
-
-		calcularPopulacao(populacao);
-		ordenarPopulacao(populacao);
+		int i = 0;
 		
-		for (int i = 0; i < tamPopulacao; i++) {
-			if (i < maxElitismo) {
-				novaPopulacao.add(populacao.get(i));
-			} else {
-				Individuo x;
-				Individuo y;
-				Individuo filho;
-			}
+		while (i < 1) {
+			populacao = populacao.selecionar(elitismo, cursos, disciplinas);
+			populacao = populacao.crossover(tamCromossomo);
+			// populacao = populacao.mutacao();
+			populacao.exibir();
+			i++;
 		}
-		
-		return novaPopulacao;
-	}
-
-	public static ArrayList<Individuo> gerarPopulacaoInicial() {
-
-		ArrayList<Individuo> populacao = new ArrayList<Individuo>();
-		
-		for (int i = 0; i < tamPopulacao; i++) {
-			int[] cromossomo = new int[tamCromossomo];
-			
-			for (int j = 0; j < tamCromossomo; j++) {
-				cromossomo[j] = sortearDisciplina();
-			}
-			
-			populacao.add(new Individuo(cromossomo));
-		}
-		
-		return populacao;
-	}
-	
-	public static int sortearDisciplina() {
-		
-	    Random rand = new Random();
-	    Disciplina item = disciplinas.get(rand.nextInt(disciplinas.size()));
-	    
-	    return item.id;
-	}
-	
-	public static void exibirPopulacao(ArrayList<Individuo> populacao) {
-		
-		for (Individuo individuo : populacao) {
-			individuo.exibir();
-			System.out.print("\n");
-		}
-	}
-	
-	public static void calcularPopulacao(ArrayList<Individuo> populacao) {
-		
-		for (Individuo individuo : populacao) {
-			individuo.calcularApticao(cursos, disciplinas);
-		}
-	}
-	
-	public static ArrayList<Individuo> ordenarPopulacao(ArrayList<Individuo> populacao) {
-		
-		Collections.sort(populacao, new Comparator<Individuo>() {
-			public int compare(Individuo o1, Individuo o2) {
-				
-				if (o1.fitness < o2.fitness) {
-			      return 1;
-			    } else if (o1.fitness > o2.fitness) {
-			      return -1;
-			    }
-				
-			    return 0;
-			}
-		});
-		
-		return populacao;
-	}
-	
-	public static Individuo roletaSimples(ArrayList<Individuo> populacao) {
-		
-		int total = 0;
-		
-		for (Individuo individuo : populacao) {
-			total += individuo.fitness;
-		}
-		
-		for (Individuo individuo : populacao) {
-			int probabilidade = individuo.fitness * 100 / total;
-		}
-		
-		return populacao.get(0);
 	}
 
 }

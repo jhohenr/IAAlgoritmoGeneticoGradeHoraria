@@ -60,6 +60,10 @@ public class Individuo {
 			vDisciplinas[contHorario] = cromossomo[i];
 			contHorario++;
 		}
+		
+		if (fitness < 0) {
+			fitness = 0;
+		}
 	}
 	
 	public void exibir() {

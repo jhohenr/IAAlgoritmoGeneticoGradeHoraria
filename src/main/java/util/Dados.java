@@ -40,15 +40,16 @@ public class Dados {
 		try {
 			Document doc = leitura();
 			NodeList nList = doc.getElementsByTagName("class");
-			
+
 			for (int i = 0; i < nList.getLength(); i++) {
 				Node nNode = nList.item(i);
-				
+
 				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 					Element eElement = (Element) nNode;
-					
+
 					if (eElement.getAttribute("name").startsWith("Grad")) {
-						Curso item = new Curso(Integer.parseInt(eElement.getAttribute("id")), eElement.getAttribute("name"));
+						Curso item = new Curso(Integer.parseInt(eElement.getAttribute("id")),
+								eElement.getAttribute("name"));
 						items.add(item);
 					}
 				}
@@ -67,13 +68,14 @@ public class Dados {
 		try {
 			Document doc = leitura();
 			NodeList nList = doc.getElementsByTagName("teacher");
-			
+
 			for (int i = 0; i < nList.getLength(); i++) {
 				Node nNode = nList.item(i);
-				
+
 				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 					Element eElement = (Element) nNode;
-					Professor item = new Professor(Integer.parseInt(eElement.getAttribute("id")), eElement.getAttribute("name"));
+					Professor item = new Professor(Integer.parseInt(eElement.getAttribute("id")),
+							eElement.getAttribute("name"));
 					items.add(item);
 				}
 			}
@@ -91,13 +93,14 @@ public class Dados {
 		try {
 			Document doc = leitura();
 			NodeList nList = doc.getElementsByTagName("subject");
-			
+
 			for (int i = 0; i < nList.getLength(); i++) {
 				Node nNode = nList.item(i);
-				
+
 				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 					Element eElement = (Element) nNode;
-					Disciplina item = new Disciplina(Integer.parseInt(eElement.getAttribute("id")), -1, eElement.getAttribute("name"));
+					Disciplina item = new Disciplina(Integer.parseInt(eElement.getAttribute("id")), -1,
+							eElement.getAttribute("name"));
 					items.add(item);
 				}
 			}
@@ -115,15 +118,20 @@ public class Dados {
 		try {
 			Document doc = leitura();
 			NodeList nList = doc.getElementsByTagName("lesson");
-			
+
 			for (int i = 0; i < nList.getLength(); i++) {
 				Node nNode = nList.item(i);
-				
+
 				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 					Element eElement = (Element) nNode;
+					int teacherId = -1;
+					
+					if (!eElement.getAttribute("teacherid").isEmpty()) {
+						teacherId = Integer.parseInt(eElement.getAttribute("teacherid"));
+					}
 
 					Aula item = new Aula(Integer.parseInt(eElement.getAttribute("id")), Integer.parseInt(eElement.getAttribute("subjectid")),
-							Integer.parseInt(eElement.getAttribute("teacherid")));
+							teacherId);
 
 					for (Disciplina disciplina : disciplinas) {
 						if (disciplina.id == Integer.parseInt(eElement.getAttribute("subjectid"))) {
@@ -148,22 +156,23 @@ public class Dados {
 		try {
 			Document doc = leitura();
 			NodeList nList = doc.getElementsByTagName("teacher");
-			
+
 			for (int i = 0; i < nList.getLength(); i++) {
 				Node nNode = nList.item(i);
-				
+
 				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 					Element eElement = (Element) nNode;
 					String[] timeoffs = eElement.getAttribute("timeoff").split(",");
 					int day = 0;
-					
+
 					for (String timeoff : timeoffs) {
 						day++;
 						int cont = 0;
-						
+
 						for (char horary : timeoff.toCharArray()) {
 							if (horary == '0') {
-								Indisponibilidade item = new Indisponibilidade(Integer.parseInt(eElement.getAttribute("id")), day, cont);
+								Indisponibilidade item = new Indisponibilidade(
+										Integer.parseInt(eElement.getAttribute("id")), day, cont);
 								items.add(item);
 							}
 							cont++;
